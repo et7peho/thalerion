@@ -11,6 +11,7 @@ choco install git -params '"/GitAndUnixToolsOnPath"'
 
 
 # Fetch your own scripts with git to [path] i.e "C:\scripts"
+git clone https://github.com/thalerion/thalerion.git 
 
 # Set path to scripts
 $env:path += ";[path]"
