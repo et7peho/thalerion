@@ -1,0 +1,380 @@
+#stdlib ligger i puppetlabs/code så ändra det i modulepath uttrycker när vi kör apply
+#ta bort parser future ur applyuttrycket
+
+#ändra i coden så att hiera.yaml pekar rätt
+#:datadir: /etc/puppet/hieradata -> /etc/puppetlabs/puppet/hieradata 
+
+
+#från sudo puppet apply --parser future --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppet/modules /bigtop-home/bigtop-deploy/puppet/manifests
+#till sudo puppet apply --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop-deploy/puppet/manifests
+
+#fixar för spark:sparkr missing dependency
+#lägg till powertoolsrepo
+
+vim /etc/yum.repos.d/CentOS-PowerTools.repo
+------------
+[PowerTools]
+name=CentOS-$releasever - PowerTools
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra
+gpgcheck=1
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+---------
+
+kör scriptet
+
+
+#347 VGA MOD I GRUB2
+
+#Wikipedia kör Apache bigtop 1.5 nu----
+
+#testat på CentOS-8.3.2011-x86_64-dvd1.iso
+
+#lägg till i sudoers
+su
+usermod -aG wheel hduser
+
+#lägg till virtualbox guestadditions
+sudo yum install epel-release
+sudo yum -y install gcc make perl kernel-devel kernel-headers bzip2 dkms
+sudo yum update kernel-*
+reboot
+
+#mount guestadditions with virtualbox menu
+sudo mkdir -p /mnt/cdrom
+sudo mount /dev/cdrom /mnt/cdromy
+cd /mnt/cdrom
+sudo ./VBoxLinuxAdditions.run 
+
+#network config
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.122.102
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s8
+UUID=40716d36-72bd-434e-81fe-66154bfd4db7
+DEVICE=enp0s8
+ONBOOT=yes
+GATEWAY=192.168.122.1
+DNS1=192.168.122.1
+
+
+#Install repo
+https://downloads.apache.org/bigtop/bigtop-1.5.0/repos/centos-8/bigtop.repo 
+#=> lägg i bigtop.repo
+
+#lägg till hosts
+192.168.122.101 nn1
+192.168.122.102 nn2
+192.168.122.103 dn1
+
+
+
+# ändra vga till 1024x768x32 0x31b
+
+sudo vi /etc/default/grub
+#lägg till "vga=794"  i GRUB_CMDLINE_LINUX
+sudo grub2-mkconfig -o $(sudo readlink -f /etc/grub2.cfg)
+reboot
+
+#controllera sshd
+sudo 
+
+
+#sätt hostname
+sudo hostnamectl set-hostname h1
+
+#config hadoop 2-x fast via rpm
+# se till att maskinerna har fast ip och kan pinga med varandra och har sina hostname i hostfilerna. Fixa till lösenordslöss ssh också
+
+
+
+#fixa til nätverk statisk eller DHCP efter grundinstallation
+sudo vi /etc/sysconfig/network-scripts/ifcfg-[interfacename]
+
+sudo yum install git
+
+#disabla bradvägg
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+sudo systemctl mask --now firewalld
+
+#add nodes to host file
+
+
+# intallera java
+
+sudo yum install -y java-1.8.0-openjdk
+java -version
+	openjdk version 1.8.0_275
+
+# installera unzip och curl
+sudo yum -y install unzip curl
+
+#clona in bigtop repo in i /[user]/bigtop
+git clone https://github.com/apache/bigtop.git
+
+#installera puppet och dess beroenden med puppetize.sh
+sudo /[user]/bigtop/bigtop_toolchain/bin/puppetize.sh
+
+
+#puppet ligger numera under /etc/puppetlabs/puppet
+#kopiera hiera.yaml från bigtop repot
+sudo cp /bigtop-deploy/puppet/hiera.yaml /etc/puppetlabs/puppet
+
+#säkerställ att mapp för hieradata finns i /etc/puppetlabs/puppet
+sudo mkdir -p /etc/puppetlabs/puppet/hieradata
+
+#rsynca bigtopsrepots site.yaml och dess hierakatalog /bigtop till /etc/puppetlabs/puppet/hieradata
+sudo rsync -a --delete /bigtop-deploy/puppet/hieradata/site.yaml bigtop-deploy/puppet/hieradata /etc/puppetlabs/puppet/hieradata
+
+
+
+
+#BOM
+Build of materials, vad skall vi bygga
+
+Vi vill ha masternoderna/name nodera i HA så minst 3 stycken.
+
+Steg 1 - first uses cases:
+
+
+
+cluster_components:
+* Alluxio: 
+is an open-source virtual distributed file system (VDFS).Popular frameworks running on top of Alluxio include Presto, Apache Spark, Apache Hive, and TensorFlow, etc. 
+* AMBARI: 
+The Apache Ambari project is aimed at making Hadoop management simpler by developing software for provisioning, managing, and monitoring Apache Hadoop clusters. * Ambari provides an intuitive, easy-to-use Hadoop management web UI backed by its RESTful APIs.
+* Flink: 
+— Stateful Computations over Data Streams
+* Flume: 
+is a distributed, reliable, and available service for efficiently collecting, aggregating, and moving large amounts of streaming event data.
+* Giraph: 
+is an iterative graph processing system built for high scalability.
+* GPDB: Greenplum Database (GPDB) is an advanced, fully featured, open source data warehouse, based on PostgreSQL. It provides powerful and rapid analytics on petabyte scale data volumes. 
+* IGNITE_HADOOP: 
+HADDOP INTEGRATION WITH APACHE IGNITE
+* hBASE: 
+Use Apache HBase™ when you need random, realtime read/write access to your Big Data.
+* hcat: 
+Basically, HCatalog provides a consistent interface between Apache Hive, Apache Pig, and MapReduce. Since it ships with Hive, you could consider it an extension of Hive.
+* hive: 
+The Apache Hive ™ data warehouse software facilitates reading, writing, and managing large datasets residing in distributed storage using SQL.
+* httpfs: 
+httpFS is a server that provides a REST HTTP gateway supporting all HDFS File System operations (read and write). And it is inteoperable with the webhdfs REST HTTP API.
+* mahout:
+Apache Mahout(TM) is a distributed linear algebra framework and mathematically expressive Scala DSL designed to let mathematicians, statisticians, and data scientists quickly implement their own algorithms. Apache Spark is the recommended out-of-the-box distributed back-end, or can be extended to other distributed backends.
+mapred-app:TBD
+* oozie: 
+Apache Oozie Workflow Scheduler for Hadoop
+* qfs: 
+Quantcast File System (QFS) is an open-source distributed file system software package for large-scale MapReduce or other batch-processing workloads. It was designed as an alternative to the Apache Hadoop Distributed File System (HDFS), intended to deliver better performance and cost-efficiency for large-scale processing clusters.
+* solrcloud: 
+Apache Solr includes the ability to set up a cluster of Solr servers that combines fault tolerance and high availability. Called SolrCloud, these capabilities provide distributed indexing and search capabilities, supporting the following features:
+Central configuration for the entire cluster
+Automatic load balancing and fail-over for queries
+ZooKeeper integration for cluster coordination and configuration.
+* spark : Apache Spark™ is a unified analytics engine for large-scale data processing.
+* sqoop : Apache Sqoop(TM) is a tool designed for efficiently transferring bulk data between Apache Hadoop and structured datastores such as relational databases.
+* sqoop2: ev, deprecated - According to sqoop.apache.org, Sqoop 2 is not feature complete and should not be used for production systems. Fair enough, some people may want to test out Sqoop 2's new features on their test environments.
+* tez: The Apache TEZ® project is aimed at building an application framework which allows for a complex directed-acyclic-graph of tasks for processing data. It is currently built atop Apache Hadoop YARN.
+* yarn: he fundamental idea of YARN is to split up the functionalities of resource management and job scheduling/monitoring into separate daemons. The idea is to have a global ResourceManager (RM) and per-application ApplicationMaster (AM). An application is either a single job or a DAG of jobs.
+* yscsb : The Yahoo! Cloud Serving Benchmark (YCSB) is an open-source specification and program suite for evaluating retrieval and maintenance capabilities of computer programs. It is often used to compare relative performance of NoSQL database management systems.
+* zookeeper: ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
+
+
+---------start modified script-----------------
+# Welcome
+RED='\033[0;31m'; BLUE='\033[0;34m'; DEFAULTC='\033[0m'
+printf "\nWelcome to the ${RED}Bigtop${DEFAULTC} installer\n\n"
+ 
+ 
+# Check for CentOS 8
+rel=$(cat /etc/redhat-release 2> /dev/null)
+if [[ -n "$rel" && ${rel:15:1}==6 ]]; then
+        printf "This OS is running ${BLUE}$rel${DEFAULTC} which is compatible with this helper script.\n\n"
+else
+        printf "This OS is ${RED}not compatible${DEFAULTC} with this Bigtop release. Please install CentOS 6.x\n\n"
+        exit 1
+fi
+ 
+ 
+# Get hostname
+printf "Enter the hostname of the master node or press Enter to use ${RED}$(hostname -f)${DEFAULTC} : "
+read mnode
+mnode=${mnode:-$(hostname -f)}
+echo
+ 
+ 
+# Install Dependencies
+sudo yum -y install git
+ 
+ 
+# Install Puppet
+sudo rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+sudo yum -y install puppet
+sudo puppet module install puppetlabs-stdlib
+ 
+ 
+# Install Bigtop Puppet
+sudo git clone https://github.com/apache/bigtop.git /bigtop-home
+sudo sh -c "cd /bigtop-home; git checkout branch-1.5"
+sudo cp -r /bigtop-home/bigtop-deploy/puppet/hieradata/ /etc/puppetlabs/puppet/
+sudo cp /bigtop-home/bigtop-deploy/puppet/hiera.yaml /etc/puppetlabs/puppet
+ 
+ 
+# Configure
+sudo su root -c "cat > /etc/puppetlabs/puppet/hieradata/site.yaml << EOF
+---
+bigtop::hadoop_head_node: "$mnode"
+hadoop::hadoop_storage_dirs:
+- /data/1
+- /data/2
+hadoop_cluster_node::cluster_components:
+- hdfs
+- spark
+- yarn
+bigtop::jdk_package_name: "java-1.8.0-openjdk-devel.x86_64"
+bigtop::bigtop_repo_uri: "http://repos.bigtop.apache.org/releases/1.5.0/centos/8/x86_64"
+EOF
+"
+ 
+# Deploy
+sudo puppet apply --modulepath=/bigtop-home/bigtop/bigtop-deploy/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop/bigtop-deploy/puppet/manifests
+
+
+
+
+-------------pseudo installl ---------
+cd /etc/yum.repos.d
+sudo wget -O /etc/yum.repos.d/bigtop.repo https://www.apache.org/dist/bigtop/bigtop-1.5.0/repos/centos-8/bigtop.repo
+sudo yum install hadoop-conf-pseudo
+
+#installera bigtop namenode
+sudo yum install hadoop-hdfs-namenode 
+
+ bigtop-groovy                noarch   2.5.4-1.el8            bigtop      4.7 M
+ bigtop-jsvc                  x86_64   1.0.15-1.el8           bigtop       35 k
+ bigtop-utils                 noarch   1.5.0-1.el8            bigtop       15 k
+ esmtp                        x86_64   1.2-15.el8             epel         57 k
+ hadoop                       x86_64   2.10.1-1.el8           bigtop       28 M
+ hadoop-hdfs                  x86_64   2.10.1-1.el8           bigtop       29 M
+ libesmtp                     x86_64   1.0.6-18.el8           epel         70 k
+ liblockfile                  x86_64   1.14-1.el8             appstream    32 k
+ m4                           x86_64   1.4.18-7.el8           baseos      223 k
+ mailx                        x86_64   12.5-29.el8            baseos      257 k
+ ncurses-compat-libs          x86_64   6.1-7.20180224.el8     baseos      331 k
+ patch                        x86_64   2.7.6-11.el8           baseos      138 k
+ redhat-lsb-core              x86_64   4.1-47.el8             appstream    46 k
+ redhat-lsb-submod-security   x86_64   4.1-47.el8             appstream    22 k
+ spax                         x86_64   1.5.3-13.el8           baseos      217 k
+ zookeeper    
+
+#Installera java
+sudo yum install java
+
+ java-1.8.0-openjdk          x86_64 1:1.8.0.282.b08-2.el8_3     appstream 333 k
+Installing dependencies:
+ copy-jdk-configs            noarch 3.7-4.el8                   appstream  27 k
+ java-1.8.0-openjdk-headless x86_64 1:1.8.0.282.b08-2.el8_3     appstream  34 M
+ javapackages-filesystem     noarch 5.3.0-1.module_el8.0.0+11+5b8c10bd
+                                                                appstream  30 k
+ lksctp-tools                x86_64 1.0.18-3.el8                baseos    100 k
+ ttmkfdir                    x86_64 3.0.9-54.el8                appstream  62 k
+ tzdata-java                 noarch 2021a-1.el8                 appstream 192 k
+ xorg-x11-fonts-Type1        noarch 7.5-19.el8                  appstream 522 k
+Enabling module streams:
+ javapackages-runtime               201801      
+´
+
+PÅ nn1
+
+# ändra i bshrc, kolla rpm -ql
+# User specific aliases and functions
+export HADOOP_HOME=/usr/lib/hadoop
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-2.el8_3.x86_64/jre
+export ZOOKEEPER_HOME =/usr/lib/zookeeper
+export PATH=$PATH: $JAVA_HOME/bin: $HADOOP_HOME/bin: $HADOOP_HOME/sbin:$ZOOKEEPER_HOME/bin
+
+
+#make ssh keys
+ssh-keygen -t rsa
+
+#ändra rättighet
+sudo chmod 700 .ssh/
+ #i .ssh directory ändra rättigheterna på filerna
+sudo chmod 600 *
+
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ssh-copy-id -i ~/.ssh/id_rsa.pub stefan@nn2
+ssh-copy-id -i ~/.ssh/id_rsa.pub stefan@dn1
+
+#poå alla noder
+sudo systemctl restart sshd.service 
+
+#konfigurera core-site.xml och hdfs-site.xml
+
+#zookkeper conf
+n a conf directory you have zoo_sample.cfg file, create the zoo.cfg using zoo_sample.cfg file. ? mkdri directory for ZK i zoo.conf
+
+dataDir=/home/stefan/HA/zookeeper
+Server.1=nn1.cluster.com:2888:3888
+
+Server.2=nn2.cluster.com:2888:3888
+
+Server.3=dn1.cluster.com:2888:3888
+
+
+#scp bigtop till andra burkar
+sudo scp /etc/yum.repos.d/bigtop.repo dn1:/etc/yum.repos.d
+sudo scp /etc/yum.repos.d/bigtop.repo nn2:/etc/yum.repos.d
+
+#kopiera bashrc
+[stefan@nn1 conf]$ scp /home/stefan/.bashrc  dn1:/home/stefan  
+[stefan@nn1 conf]$ scp /home/stefan/.bashrc  nn2:/home/stefan
+
+#On nn2
+sudo yum, install java
+sudo yum install hadoop-hdfs-namenode
+sudo yum install hadoop-hdfs-journalnode
+
+#On dn1
+sudo yum install java
+sudo yum install hadoop-hdfs-datanode zookeeper
+sudo yum install hadoop-hdfs-journalnode
+
+#Copy conf
+scp -r /etc/hadoop/conf root@dn1:/etc/hadoop
+scp -r /etc/zookeeper/conf root@dn1:/etc/hadoop
+
+#skapa myid katalog i zookeeper katalogerna
+
+
+#startordning, starta journalnoderna först
+hadoop-daemon.sh start journalnode
+
+#kontrollera med jps, kanske måste installera sudo yum install java-1.8.0-openjdk-devel
+
+60g 
+
+14g kakao i 7 bitar
+1% är teobromin = 0,14g = 140mg teobromin
+
+sandor 5,6 kg * 20 mg = 126mg 
+
+
+
