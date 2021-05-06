@@ -10,6 +10,11 @@ uname -r
 
 #Installera guest additions med GUI mounta cdrom, reboota
 
+#################### install java ###############
+sudo yum install java
+
+###########Installl git #############
+Sudo yum install git
 
 #Installera Visual studio code  ###################################
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
