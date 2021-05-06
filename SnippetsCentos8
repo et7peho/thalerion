@@ -1,4 +1,4 @@
-#Installera guestadditions Centos8
+#Installera guestadditions Centos8 ####################################
 
 sudo yum install epel-release
 sudo yum install gcc make perl kernel-devel kernel-headers bzip2 dkms
@@ -9,6 +9,29 @@ rpm -q kernel-devel
 uname -r
 
 #Installera guest additions med GUI mounta cdrom, reboota
+
+
+#Installera Visual studio code  ###################################
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+sudo nano /etc/yum.repos.d/vscode.repo
+#klistra in följande
+---------------
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+-------------
+
+sudo yum install code
+
+#Installera powershell linux ##################################
+curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+sudo yum -y install powershell
+pwsh
+
 
 
 
