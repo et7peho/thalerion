@@ -13,6 +13,10 @@ uname -r
 #################### install java ###############
 sudo yum install java
 
+
+###################installera java för utveckling ######
+sudo yum install java-11-openjdk-devel
+
 ###########Installl git #############
 Sudo yum install git
 
