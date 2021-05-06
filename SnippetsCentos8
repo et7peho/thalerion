@@ -1,0 +1,14 @@
+#Installera guestadditions Centos8
+
+sudo yum install epel-release
+sudo yum install gcc make perl kernel-devel kernel-headers bzip2 dkms
+sudo yum update kernel-*
+sudo reboot
+#check kernel versions
+rpm -q kernel-devel
+uname -r
+
+#Installera guest additions med GUI mounta cdrom, reboota
+
+
+
