@@ -10,6 +10,11 @@ uname -r
 
 #Installera guest additions med GUI mounta cdrom, reboota
 
+##############install artifactory ###############
+wget https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo -O jfrog-artifactory-rpms.repo;
+sudo mv jfrog-artifactory-rpms.repo /etc/yum.repos.d/;
+sudo yum update && sudo yum install jfrog-artifactory-oss
+
 #################### install java ###############
 sudo yum install java
 
