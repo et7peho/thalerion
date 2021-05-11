@@ -47,5 +47,10 @@ sudo yum -y install powershell
 pwsh
 
 
+############firewall port  ##############
+sudo firewall-cmd --zone=public --permanent --add-port 8082/tcp
+
+
+
 
 
