@@ -2,6 +2,10 @@
 set -e
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 
+#U can get the script by doing
+# wget --no-check-certificate --no-cache --no-cookies https://github.com/thalerion/thalerion/raw/master/deploy-hadoop.sh?commit=d554791 -O deploy-bigtop.sh
+# chmod +x deploy-bigtop.sh
+
 # Welcome
 RED='\033[0;31m'; BLUE='\033[0;34m'; DEFAULTC='\033[0m'
 printf "\nWelcome to the ${RED}Bigtop${DEFAULTC} installer\n\n"
