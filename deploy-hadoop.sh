@@ -42,7 +42,7 @@ sudo cp /bigtop-home/bigtop-deploy/puppet/hiera.yaml /etc/puppetlabs/puppet
  
  
 # Configure
-sudo su root -c "cat > /etc/puppet/hieradata/site.yaml << EOF
+sudo su root -c "cat > /etc/puppetlabs/puppet/hieradata/site.yaml << EOF
 ---
 bigtop::hadoop_head_node: "$mnode"
 hadoop::hadoop_storage_dirs:
@@ -58,4 +58,4 @@ EOF
  
  
 # Deploy
-sudo puppet apply --parser future --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppet/modules /bigtop-home/bigtop-deploy/puppet/manifests
+sudo puppet apply --parser future --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppetlabs/puppet/modules /bigtop-home/bigtop-deploy/puppet/manifests
