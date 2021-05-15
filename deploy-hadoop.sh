@@ -55,11 +55,19 @@ else
     sudo sh -c "cd /bigtop-home; git checkout release-1.5.0"
     sudo cp -r /bigtop-home/bigtop-deploy/puppet/hieradata/ /etc/puppetlabs/puppet/
     sudo cp /bigtop-home/bigtop-deploy/puppet/hiera.yaml /etc/puppetlabs/puppet
+    sudo su root -c "cat > /etc/puppetlabs/puppet/hiera.yaml << EOF
+---
+:yaml:
+  :datadir: /etc/puppetlabs/puppet/hieradata
+:hierarchy:
+  - site
+  - "bigtop/%{hadoop_hiera_ha_path}"
+  - bigtop/cluster
+  - bigtop/repo
+EOF
+"    
 fi
 
-
-
- 
  
 # Configure
 sudo su root -c "cat > /etc/puppetlabs/puppet/hieradata/site.yaml << EOF
