@@ -25,13 +25,27 @@ echo
  
  
 # Install Dependencies
+if rpm -q --quiet git ; 
+then 
+  echo "git installed" 
+fi
+else
 sudo yum -y install git
+fi
+
+
  
  
 # Install Puppet
+if rpm -q --quiet puppet ; 
+then 
+  echo "puppet installed" 
+fi
+else
 sudo rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
 sudo yum -y install puppet
 sudo puppet module install puppetlabs-stdlib
+fi
  
 
 if [ -d "/bigtop-home" ] 
