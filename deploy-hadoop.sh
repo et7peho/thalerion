@@ -1,3 +1,7 @@
+#!/bin/bash 
+set -e
+# Any subsequent(*) commands which fail will cause the shell script to exit immediately
+
 # Welcome
 RED='\033[0;31m'; BLUE='\033[0;34m'; DEFAULTC='\033[0m'
 printf "\nWelcome to the ${RED}Bigtop${DEFAULTC} installer\n\n"
