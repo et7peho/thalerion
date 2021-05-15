@@ -57,8 +57,7 @@ else
     echo "Error: Directory /path/to/dir does not exists."    
     sudo git clone https://github.com/apache/bigtop.git /bigtop-home
     sudo sh -c "cd /bigtop-home; git checkout release-1.5.0"
-    sudo cp -r /bigtop-home/bigtop-deploy/puppet/hieradata/ /etc/puppetlabs/puppet/
-    sudo cp /bigtop-home/bigtop-deploy/puppet/hiera.yaml /etc/puppetlabs/puppet
+    sudo cp -r /bigtop-home/bigtop-deploy/puppet/hieradata/ /etc/puppetlabs/puppet/    
     sudo su root -c "cat > /etc/puppetlabs/puppet/hiera.yaml << EOF
 ---
 :yaml:
