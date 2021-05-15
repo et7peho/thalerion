@@ -78,4 +78,4 @@ EOF
  
  
 # Deploy
-sudo puppet apply --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppetlabs/puppet/modules /bigtop-home/bigtop-deploy/puppet/manifests
+sudo puppet apply --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop-deploy/puppet/manifests
