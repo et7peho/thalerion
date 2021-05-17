@@ -79,9 +79,18 @@ bigtop::hadoop_head_node: "$mnode"
 hadoop::hadoop_storage_dirs:
 - /data/1
 - /data/2
-hadoop_cluster_node::cluster_components:
-- hdfs
-- spark
+
+bigtop::roles_enabled: true
+
+bigtop::roles:
+- namenode
+- resourcemanager
+- datanode
+- nodemanager
+- hadoop-client
+- mapred-app
+
+
 bigtop::jdk_package_name: "java-1.8.0-openjdk-devel.x86_64"
 bigtop::bigtop_repo_uri: "http://repos.bigtop.apache.org/releases/1.5.0/centos/8/x86_64"
 EOF
