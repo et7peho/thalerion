@@ -89,6 +89,10 @@ bigtop::roles:
 - nodemanager
 - hadoop-client
 - mapred-app
+- oozie-server
+- oozie-client
+- spark-on-yarn
+- spark-yarn-slave
 
 
 bigtop::jdk_package_name: "java-1.8.0-openjdk-devel.x86_64"
