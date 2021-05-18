@@ -1,6 +1,10 @@
 #stdlib ligger i puppetlabs/code så ändra det i modulepath uttrycker när vi kör apply
 #ta bort parser future ur applyuttrycket
 
+
+#Lägga till spark2 i oozie
+#https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.6.0/bk_spark-component-guide/content/ch_oozie-spark-action.html#spark-config-oozie-spark2
+
 #ändra i coden så att hiera.yaml pekar rätt
 #:datadir: /etc/puppet/hieradata -> /etc/puppetlabs/puppet/hieradata 
 
