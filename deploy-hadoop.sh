@@ -103,3 +103,16 @@ EOF
  
 # Deploy
 sudo puppet apply --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop-deploy/puppet/manifests
+
+
+#Setup oozie
+#/usr/lib/oozie/bin/oozie-setup.sh sharelib create -fs hdfs://hadooptest:8020
+#export OOZIE_URL=http://hadooptest:11000/oozie
+#copy sparklibs från /usr/lib/spark/jars till hdfs sharelibdir "spark2"
+#oozie admin -shareliblist
+#ozie admin -sharelibupdate
+#Uppdatera filerna i /testapp för given konfiguration 
+#oozie job -oozie http://hadooptest:11000 -config /testapp/job.properties -dryrun
+
+
+
