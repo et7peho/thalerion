@@ -1,5 +1,9 @@
 # thalerion
 
+#COnfigure hadoop mapreduce
+https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.6.5/bk_command-line-installation/content/configure_yarn_and_mapreduce.html
+
+
 Scripts that u could use to initialize any box for dev ctf:s
 Outline:
 open powershell with administrative rights
