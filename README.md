@@ -1,5 +1,13 @@
 # thalerion
 
+#Update spark-default.conf
+
+Spark's documentation suggests to set spark.yarn.jars property to avoid this copying. So I set below below property in spark-defaults.conf file.
+
+spark.yarn.jars hdfs://sanjeevd.br:9000//user/spark/share/lib
+
+
+
 #Run mapreduce
 $ bin/hadoop dfs -ls /usr/joe/wordcount/input/
 /usr/joe/wordcount/input/file01
