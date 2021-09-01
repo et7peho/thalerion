@@ -1,2 +1,21 @@
 #Urls
 # https://www.digitalocean.com/community/tutorials/how-to-install-apache-kafka-on-centos-7
+
+wget https://dlcdn.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+tar -xf kafka_2.13-2.8.0.tgz 
+
+bin/zookeeper-server-start.sh config/zookeeper.properties 
+bin/kafka-server-start.sh config/server.properties 
+
+#Create topic
+bin/kafka-topics.sh --create --topic test --bootstrap-server localhost:9092
+
+#produce single message at console
+bin/kafka-console-producer.sh --topic test --bootstrap-server localhost:9092
+
+#Conbsume all events in topic
+bin/kafka-console-consumer.sh --topic test --from-beginning --bootstrap-server localhost:9092
+
+#100 records p1 per secund
+bin/kafka-producer-perf-test.sh  --topic test --num-records 100 --throughput 1 --record-size 1 --producer-props bootstrap.servers=localhost:9092
+
