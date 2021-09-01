@@ -7,3 +7,24 @@ OpenJDK Runtime Environment (build 1.8.0_302-b08)
 OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
 
 tar -xzvf hadoop-2.10.1/hadoop-2.10.1.tar.gz
+
+
+#Edit hadoop-env
+vi hadoop-2.7.3/etc/hadoop/hadoop-env.sh
+Find the line:
+
+export JAVA_HOME=$
+Replace it with:
+
+export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+
+Test hadoop and java works
+hadoop-2.10.1/bin/hadoop version
+#output 
+Hadoop 2.10.1
+Subversion https://github.com/apache/hadoop -r 1827467c9a56f133025f28557bfc2c562d78e816
+Compiled by centos on 2020-09-14T13:17Z
+Compiled with protoc 2.5.0
+From source with checksum 3114edef868f1f3824e7d0f68be03650
+This command was run using /home/stefan/hadoop-2.10.1/share/hadoop/common/hadoop-common-2.10.1.jar
+#end output
