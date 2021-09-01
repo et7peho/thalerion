@@ -53,7 +53,10 @@ ssh localhost
 Last login: Wed Sep  1 11:10:28 2021 from localhost
 [stefan@localhost ~]$ exit
 
+#format namenode
+hadoop-2.10.1/bin/hdfs namenode -format
 
-
+#Start dfs
+hadoop-2.10.1/sbin/start-dfs.sh
 
 
