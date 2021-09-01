@@ -34,13 +34,25 @@ This command was run using /home/stefan/hadoop-2.10.1/share/hadoop/common/hadoop
 mkdir sources
 cp /hadoop-2.7.3/etc/hadoop/*.xml /sources
 
-#Run mpreduce job which goes through the config files finding the word principal
+#Run hadoop standalone mapreduce job which goes through the config files finding the word principal
 hadoop-2.10.1/bin/hadoop jar hadoop-2.7.3/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.3.jar grep /sources ~/output 'principal[.]*'
 
 #Run cat over output dir, shoudl say something about number of occurences of the word principal
 cat output/*
 6	principal
 1	principal.
+
+#Set up pseudo distributed mode
+Set up passless ssh to localhost
+$ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+$ chmod 0600 ~/.ssh/authorized_keys
+
+#Test ssh
+ssh localhost
+Last login: Wed Sep  1 11:10:28 2021 from localhost
+[stefan@localhost ~]$ exit
+
 
 
 
