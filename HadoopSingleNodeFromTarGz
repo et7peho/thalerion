@@ -28,3 +28,20 @@ Compiled with protoc 2.5.0
 From source with checksum 3114edef868f1f3824e7d0f68be03650
 This command was run using /home/stefan/hadoop-2.10.1/share/hadoop/common/hadoop-common-2.10.1.jar
 #end output
+
+#Test hadoop
+#Create test files to work on in sources dir
+mkdir sources
+cp /hadoop-2.7.3/etc/hadoop/*.xml /sources
+
+#Run mpreduce job which goes through the config files finding the word principal
+hadoop-2.10.1/bin/hadoop jar hadoop-2.7.3/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.3.jar grep /sources ~/output 'principal[.]*'
+
+#Run cat over output dir, shoudl say something about number of occurences of the word principal
+cat output/*
+6	principal
+1	principal.
+
+
+
+
