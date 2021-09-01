@@ -36,7 +36,7 @@ extract.namespace=org.apache.gobblin.extract.kafka
 writer.builder.class=org.apache.gobblin.writer.SimpleDataWriterBuilder
 writer.file.path.type=tablename
 writer.destination.type=HDFS
-writer.output.format=txt
+writer.output.format=avro
  
 data.publisher.type=org.apache.gobblin.publisher.BaseDataPublisher
 data.publisher.final.dir=/gobblintest/job-output
