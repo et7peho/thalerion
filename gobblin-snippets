@@ -1,2 +1,17 @@
 # https://jaysen99.medium.com/apache-gobblin-v0-15-getting-started-guide-9b1993b84987
 # https://cwiki.apache.org/confluence/display/GOBBLIN/Kafka-HDFS-Ingestion
+
+https://github.com/apache/gobblin
+
+git clone https://github.com/apache/gobblin.git
+
+#Build distand skip tests
+./gradlew build -x findbugsMain -x test -x rat -x checkstyleMain
+
+
+run tests and build distro req maven
+sudo yum install maven
+./gradlew build
+
+
+
