@@ -8,6 +8,57 @@ git clone https://github.com/apache/gobblin.git
 #Build distand skip tests
 ./gradlew build -x findbugsMain -x test -x rat -x checkstyleMain
 
+#kopiera ut den skapade disten ur 
+/gobblin/build/gobblin-distribution/distributions/apache-gobblin-incubating-bin-0.17.0.tar.gz
+
+#packa upp , hmnar i gobblin-dist som default
+tar -xvzf apache-gobblin-incubating-bin-0.17.0.tar.gz
+
+
+#kör tesdt skott vi gobblin cli, för att kolla att JAVA_HOME m.m. fungerar
+gobblin-dist/bin/gobblin cli run wikipedia -lookback P10D LinkedIn Wikipedia:Sandbox
+
+#Skapa en kafka2hdfs fil efter denna guide https://cwiki.apache.org/confluence/display/GOBBLIN/Kafka-HDFS-Ingestion
+vi kafka2hdfs.pull
+
+#start kafa2hdfs.pull 
+job.name=GobblinKafkaQuickStart
+job.group=GobblinKafka
+job.description=Gobblin quick start job for Kafka
+job.lock.enabled=false
+ 
+kafka.brokers=localhost:9092
+topic.whitelist=test
+ 
+source.class=org.apache.gobblin.source.extractor.extract.kafka.KafkaSimpleSource
+extract.namespace=org.apache.gobblin.extract.kafka
+ 
+writer.builder.class=org.apache.gobblin.writer.SimpleDataWriterBuilder
+writer.file.path.type=tablename
+writer.destination.type=HDFS
+writer.output.format=txt
+ 
+data.publisher.type=org.apache.gobblin.publisher.BaseDataPublisher
+data.publisher.final.dir=/gobblintest/job-output
+ 
+metrics.reporting.file.enabled=true
+metrics.log.dir=/gobblin-kafka/metrics
+metrics.reporting.file.suffix=txt
+ 
+bootstrap.with.offset=earliest 
+fs.uri=hdfs://localhost:9000
+writer.fs.uri=hdfs://localhost:9000
+state.store.fs.uri=hdfs://localhost:9000
+state.store.dir=/gobblin-kafka/state-store
+task.data.root.dir=/jobs/kafkaetl/gobblin/gobblin-kafka/task-data"
+#slut fil
+
+
+#För att köra gobblin standalone med jobb config kör denna rad.
+gobblin-dist/bin/gobblin cli run -jobName test1 -jobFile gobblin-jobs/kafka2hdfs.pull
+
+
+
 
 run tests and build distro req maven
 sudo yum install maven
