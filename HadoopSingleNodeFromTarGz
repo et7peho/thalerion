@@ -59,4 +59,4 @@ hadoop-2.10.1/bin/hdfs namenode -format
 #Start dfs
 hadoop-2.10.1/sbin/start-dfs.sh
 
-
+#Do instructions for yarn at https://hadoop.apache.org/docs/r2.10.1/hadoop-project-dist/hadoop-common/SingleCluster.html#Pseudo-Distributed_Operation
