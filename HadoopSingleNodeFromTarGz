@@ -5,3 +5,5 @@ java -version
 openjdk version "1.8.0_302"
 OpenJDK Runtime Environment (build 1.8.0_302-b08)
 OpenJDK 64-Bit Server VM (build 25.302-b08, mixed mode)
+
+tar -xzvf hadoop-2.10.1/hadoop-2.10.1.tar.gz
