@@ -8,6 +8,9 @@ git clone https://github.com/apache/gobblin.git
 #Build distand skip tests
 ./gradlew build -x findbugsMain -x test -x rat -x checkstyleMain
 
+#Om man vill bygga en dist mot en viss hadoop version
+./gradlew assemble -PhadoopVersion=2.10.1
+
 #kopiera ut den skapade disten ur 
 /gobblin/build/gobblin-distribution/distributions/apache-gobblin-incubating-bin-0.17.0.tar.gz
 
