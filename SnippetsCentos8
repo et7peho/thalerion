@@ -51,6 +51,13 @@ pwsh
 sudo firewall-cmd --zone=public --permanent --add-port 8082/tcp
 
 
+#Bashrc hacks for history
+#source ~/.bashrc
+export HISTSIZE=10000
 
+#Increase HISTFILESIZE – the maximum number of lines contained in the history file (the default value is 500).
 
+export HISTFILESIZE=10000
+export HISTCONTROL=ignorespace:erasedups
+shopt -s cmdhist
 
