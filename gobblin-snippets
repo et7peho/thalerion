@@ -67,5 +67,11 @@ run tests and build distro req maven
 sudo yum install maven
 ./gradlew build
 
+#compile a simple gobblin java class and embedding it in a jobb
+#alt 1 put the java files in the cloned gobblin dir and run ./gradlew build
+ then the files will be avalible directly
+
+#alt2 Compile individual java files and package them to a jar file and include that jar file in the gobblin tasks.
+
 
 
